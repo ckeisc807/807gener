@@ -1,14 +1,12 @@
 extern crate directories;
+mod cmd;
+use cmd::Cmd;
 
 use std::io::{self, Write};
 use std::env;
-use std::env::consts::OS;
-use std::path::PathBuf;
-use gen807::Cmd;
-//use directories::BaseDirs;
 
-fn get_home_to_current_path() -> Option<PathBuf> {
-    // 獲取家目錄和當前目錄
+fn get_home_to_current_path() -> Option<String> {
+    #[allow(deprecated)]
     let home_dir = match env::home_dir() {
         Some(path) => path,
         None => {
@@ -27,10 +25,10 @@ fn get_home_to_current_path() -> Option<PathBuf> {
     // 將當前目錄轉換為相對於家目錄的路徑
     let relative_path = current_dir.strip_prefix(home_dir);
     match relative_path {
-        // 如果是 Linux 或 macOS，返回相對路徑
-        Ok(rel_path) if cfg!(any(target_os = "linux", target_os = "macos")) => Some(rel_path.to_path_buf()),
-        // 如果是 Windows 或其他作業系統，返回當前目錄的絕對路徑
-        _ => Some(current_dir),
+        // OS == Linux || MacOS
+        Ok(rel_path) if cfg!(any(target_os = "linux", target_os = "macos")) => Some(format!("~/{}",rel_path.to_str().expect("err").to_string())),
+        // OS == Windows
+        _ => Some(current_dir.to_str().expect("err").to_string())
     }
 }
 
@@ -42,36 +40,34 @@ fn main() {
     let mut cmd = Cmd::new();
 
     loop{
-        if let Some(path) = get_home_to_current_path() {
-            print!("{:?}",path);
-        }
+        let path = get_home_to_current_path().expect("err");
+        print!("807gener:{}>",path);
         io::stdout().flush()
             .expect("flush error");
-
+        
+        //input
         command.clear();
         io::stdin().read_line(&mut command)
             .expect("error command");
-
         if command.chars().last() == Some('\n') {
             command.pop();
         }
         
+        //build up command
         cmd = Cmd::from(&command);
         
-        println!("command: {:?}", cmd.inner.get_program());
-        println!("arguments: {:?}", cmd.inner.get_args());
-
         if cmd.inner.get_program() == "exit" {
             break;
         }
-
-        else{
-            println!("running");
-            let output=cmd.inner.output()
-                .expect("error");
-            let output_str = String::from_utf8_lossy(&output.stdout);
-            print!("{}",output_str);
-            println!("finished");
+        else {
+            cmd.run();
         }
+        
+            //println!("running");
+            //let output=cmd.inner.output()
+                //.expect("error");
+            //let output_str = String::from_utf7_lossy(&output.stdout);
+            //print!("{}",output_str);
+            //println!("finished");
     }
 }
