@@ -1,5 +1,5 @@
-mod problem;
-use problem::Problem;
+mod hub;
+use hub::Hub;
 
 use std::process::Command;
 use std::io::{self, Write};
@@ -35,9 +35,11 @@ fn get_home_to_current_path() -> Option<String> {
 fn main() {
     println!("In generating mode");
     let mut command = String::new();
-
     #[allow(unused_assignments)]
     let mut cmd = Cmd::new();
+    let mut hub = Hub::new();
+    hub.create("iscoj".to_string(),"https://iscoj.fg.tp.edu.tw".to_string(),"./".to_string())
+        .expect("error to create");
 
     loop{
         let path = get_home_to_current_path().expect("err");
@@ -84,7 +86,7 @@ impl Cmd {
         
         let mut inner = Command::new(name);
         inner.args(arguments);
-        Cmd {inner}
+        Cmd {inner, }
     }
 
     fn get_program(&self) -> &str {
@@ -92,11 +94,13 @@ impl Cmd {
             .to_str().expect("Can't convert program to str")
     }
 
-
     pub fn run(&mut self) {
         let program = self.get_program();
-        if self.get_program() == "cd" {
+        if program == "cd" {
             self.cd()
+        }
+        else if program == "problem" {
+
         }
         else {
             println!("running");
