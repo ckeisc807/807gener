@@ -21,7 +21,7 @@ impl Cmd{
         let new_dir = args.last().expect("err")
             .to_str().expect("error to convert to string");
         let mut new_dir_string = String::from(new_dir);
-        if new_dir.starts_with("~/"){
+        if new_dir.starts_with("~"){
             #[allow(deprecated)]
             let home_dir = env::home_dir().expect("Couldn't reach home dir");
             let home_dir_str = home_dir.to_str().expect("Covert home_dir to string failed");
@@ -33,5 +33,4 @@ impl Cmd{
             Err(e) => eprintln!("failed to change directory {:?}", e),
         }
     }
-
 }
