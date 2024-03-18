@@ -1,6 +1,6 @@
-mod hub;
+pub mod hub;
 use hub::Hub;
-mod cmd;
+pub mod cmd;
 use cmd::Cmd;
 
 use std::io::{self, Write};
@@ -38,9 +38,6 @@ fn main() {
     let mut command = String::new();
     #[allow(unused_assignments)]
     let mut cmd = Cmd::new();
-    let mut hub = Hub::new();
-    hub.create("iscoj".to_string(),"https://iscoj.fg.tp.edu.tw".to_string(),"./".to_string())
-        .expect("error to create");
 
     loop{
         let path = get_home_to_current_path().expect("err");

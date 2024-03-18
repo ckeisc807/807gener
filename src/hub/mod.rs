@@ -25,3 +25,5 @@ impl Clone for Hub {
         }
     }
 }
+
+pub use Hub as OtherHub;

@@ -6,6 +6,9 @@ impl Cmd {
         if program == "cd" {
             self.cd()
         }
+        else if program == "hub" {
+            self.hub()
+        }
         else if program == "problem" {
 
         }
@@ -18,6 +21,4 @@ impl Cmd {
             println!("finished");
         }
     }
-
-
 }
