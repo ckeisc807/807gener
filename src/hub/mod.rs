@@ -1,17 +1,18 @@
 pub mod problem;
 pub mod new;
 pub mod create;
+pub mod from;
 use problem::Problem;
 
-use serde::Serialize;
+use serde::{Serialize, Deserialize};
 
-#[derive(Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Hub {
-    is_empty: bool,
-    problems: Vec<Problem>,
-    oj_name: String,
-    oj_url: String,
-    dir_path: String,
+    pub is_empty: bool,
+    pub problems: Vec<Problem>,
+    pub oj_name: String,
+    pub oj_url: String,
+    pub dir_path: String,
 }
 
 impl Clone for Hub {
@@ -25,5 +26,3 @@ impl Clone for Hub {
         }
     }
 }
-
-pub use Hub as OtherHub;

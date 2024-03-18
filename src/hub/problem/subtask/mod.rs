@@ -1,5 +1,5 @@
-use serde::Serialize;
-#[derive(Serialize)]
+use serde::{Serialize, Deserialize};
+#[derive(Debug, Serialize, Deserialize)]
 pub struct SubTask {
     gen_file: String,
     ans_file: String,

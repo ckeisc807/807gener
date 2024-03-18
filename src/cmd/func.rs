@@ -27,6 +27,17 @@ impl Cmd {
         }
     }
 
+    pub fn cmd(&mut self, cmd: &str) -> &mut Self {
+        let parts: Vec<&str>= cmd.split_whitespace().collect();
+        let name = parts[0].to_string();
+        let arguments: Vec<String> = parts[1..].iter().map(|s| s.to_string()).collect();
+        
+        let mut _inner = Command::new(name);
+        _inner.args(arguments);
+        self.inner = _inner;
+        self
+    }
+
     pub fn get_program(&self) -> &str {
         self.inner.get_program()
             .to_str().expect("Can't convert program to str")

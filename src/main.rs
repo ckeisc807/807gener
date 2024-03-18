@@ -40,8 +40,15 @@ fn main() {
     let mut cmd = Cmd::new();
 
     loop{
-        let path = get_home_to_current_path().expect("err");
-        print!("807gener:{}>",path);
+        if cmd.hub.is_none() {
+            let path = get_home_to_current_path().expect("err");
+            print!("807gener:{}>",path);
+        }
+        else {
+            if let Some(hub) = &cmd.hub {
+                print!("selected hub:{}>", hub.oj_name);
+            }
+        }
         io::stdout().flush()
             .expect("flush error");
         
@@ -54,7 +61,7 @@ fn main() {
         }
         
         //build up command
-        cmd = Cmd::from(&command);
+        cmd.cmd(&command);
         
         if cmd.inner.get_program() == "exit" {
             break;

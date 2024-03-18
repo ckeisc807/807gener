@@ -2,8 +2,8 @@ pub mod subtask;
 use subtask::SubTask;
 use std::{fs, env};
 
-use serde::Serialize;
-#[derive(Serialize)]
+use serde::{Serialize, Deserialize};
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Problem {
     is_empty: bool,
     oj_url: String,

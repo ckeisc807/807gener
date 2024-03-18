@@ -1,5 +1,6 @@
 use super::Cmd;
 use std::{io, env};
+use std::path::Path;
 use crate::Hub;
 
 
@@ -9,6 +10,9 @@ impl Cmd {
         let action = args.first().expect("no args for hub");
         if action == "create" {
             self.create();
+        }
+        else if action == "select" {
+            self.select();
         }
     }
 
@@ -20,10 +24,16 @@ impl Cmd {
         println!("Please input oj_name");
         io::stdin().read_line(&mut oj_name)
             .expect("Error oj_name input");
-
+        if oj_name.chars().last() == Some('\n') {
+            oj_name.pop();
+        }
+        
         println!("Please input oj_url");
         io::stdin().read_line(&mut oj_url)
             .expect("Error oj_url input");
+        if oj_url.chars().last() == Some('\n') {
+            oj_url.pop();
+        }
 
         println!("Please input hub_path");
         io::stdin().read_line(&mut hub_path)
@@ -56,5 +66,19 @@ impl Cmd {
                 eprintln!("Hub hasn't created correctly");
             }
         }
+    }
+
+    pub fn select(&mut self) {
+        let args = self.get_args_string();
+        let selected_path_str = match args.get(1) {
+            Some(arg1) => arg1.clone(),
+            None => {
+                env::current_dir().expect("Could get current directory")
+                    .to_string_lossy().to_string()
+            }
+        };
+        
+        let selected_path = Path::new(&selected_path_str);
+        self.hub = Hub::from_json(selected_path);
     }
 }
