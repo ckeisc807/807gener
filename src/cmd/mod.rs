@@ -1,6 +1,7 @@
 pub mod cd;
 pub mod run;
 pub mod hub;
+pub mod problem;
 pub mod func;
 
 use crate::Hub;

@@ -9,14 +9,14 @@ impl Cmd {
         let args = self.get_args_string();
         let action = args.first().expect("no args for hub");
         if action == "create" {
-            self.create();
+            self.create_hub();
         }
         else if action == "select" {
-            self.select();
+            self.select_hub();
         }
     }
 
-    pub fn create(&mut self) {
+    pub fn create_hub(&mut self) {
         let mut oj_name = String::new();
         let mut oj_url = String::new();
         let mut hub_path = String::new();
@@ -68,7 +68,7 @@ impl Cmd {
         }
     }
 
-    pub fn select(&mut self) {
+    pub fn select_hub(&mut self) {
         let args = self.get_args_string();
         let selected_path_str = match args.get(1) {
             Some(arg1) => arg1.clone(),

@@ -1,7 +1,8 @@
 pub mod problem;
-pub mod new;
+pub mod basics;
 pub mod create;
-pub mod from;
+pub mod json;
+
 use problem::Problem;
 
 use serde::{Serialize, Deserialize};

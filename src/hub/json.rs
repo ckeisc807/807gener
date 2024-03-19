@@ -1,8 +1,7 @@
 use super::Hub;
-
 use std::path::Path;
+use std::io::{Read, Write};
 use std::fs;
-use std::io::Read;
 
 impl Hub {
     pub fn from_json (hub_path: &Path) -> Option<Self> {
@@ -28,5 +27,24 @@ impl Hub {
             .expect("Failed to parse JSON");
 
         Some(hub)
+    }
+
+
+    pub fn to_json(&self, hub_path: &Path) -> Option<&Self> {
+        let mut json_dir_path = hub_path.to_path_buf();
+        json_dir_path.push("config");
+        if !hub_path.exists(){
+            let _ = fs::create_dir_all(&hub_path).expect("create dir error");
+        }
+
+        let mut json_file_path = hub_path.to_path_buf();
+        json_file_path.push("config");
+        json_file_path.push("config.json");
+        
+        let json_string = serde_json::to_string(&self).unwrap();
+        let mut file = fs::File::create(&json_file_path).expect("create file error");
+        file.write_all(json_string.as_bytes()).unwrap();
+
+        return Some(&self);
     }
 }
