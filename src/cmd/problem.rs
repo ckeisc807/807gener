@@ -1,10 +1,9 @@
-use crate::cmd::problem;
+use crate::Hub;
 
 use super::Problem;
 use super::Cmd;
 use std::path::PathBuf;
-use std::{io, env};
-use std::path::Path;
+use std::io;
 
 
 impl Cmd {
@@ -39,7 +38,7 @@ impl Cmd {
             problem_name.pop();
         }
 
-        let hub = self.hub.as_ref().expect("hub not found");
+        let hub: &mut Hub = &mut self.hub.as_mut().expect("hub not found");
         let mut problem_path = PathBuf::from(&hub.dir_path);
 
         problem_path.push(problem_id.to_string());
@@ -53,7 +52,10 @@ impl Cmd {
         };
 
         problem.to_json(&problem_path);
-        self.problem = Some(problem);
+        self.problem = Some(problem.clone());
+        
+        hub.problems.push(problem);
+        hub.to_json(&problem_path.parent().expect("Couldn't find Hub directory"));
     }
 
     pub fn select_problem(&mut self) {

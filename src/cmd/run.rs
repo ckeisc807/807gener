@@ -10,7 +10,7 @@ impl Cmd {
             self.hub()
         }
         else if program == "problem" {
-
+            self.problem()
         }
         else {
             println!("running");
