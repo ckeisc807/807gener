@@ -45,6 +45,7 @@ impl Cmd {
 
     pub fn create_problem(&mut self) {
         let mut tmp_input = String::new();
+        let hub: &mut Hub = &mut self.hub.as_mut().expect("hub not found");
 
         println!("Please input problem id");
         io::stdin().read_line(&mut tmp_input).expect("Failed to read line");
@@ -56,6 +57,10 @@ impl Cmd {
             }
         };
 
+        for p in &hub.problems {
+            assert_ne!(p.problem_id, problem_id);
+        }
+
         println!("Please input problem name");
         let mut problem_name = String::new();
         io::stdin().read_line(&mut problem_name).expect("Failed to read line");
@@ -63,7 +68,6 @@ impl Cmd {
             problem_name.pop();
         }
 
-        let hub: &mut Hub = &mut self.hub.as_mut().expect("hub not found");
         let mut problem_path = PathBuf::from(&hub.dir_path);
         let mut default_path = PathBuf::from(&hub.dir_path);
         default_path.push("config");
