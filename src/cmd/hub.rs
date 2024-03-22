@@ -61,6 +61,8 @@ impl Cmd {
                 println!("value  exsist");
                 value.create(oj_name,oj_url,hub_path)
                     .expect("create failed");
+                env::set_current_dir(&value.dir_path)
+                    .expect("Couldn't go to hub's dir");
             }
             None => {
                 eprintln!("Hub hasn't created correctly");
@@ -79,6 +81,11 @@ impl Cmd {
         };
         
         let selected_path = Path::new(&selected_path_str);
-        self.hub = Hub::from_json(selected_path);
+        let hub = Hub::from_json(selected_path)
+            .expect("Couldn't get hub from json");
+        env::set_current_dir(&hub.dir_path)
+            .expect("Couldn't go to hub_path");
+
+        self.hub = Some(hub);
     }
 }

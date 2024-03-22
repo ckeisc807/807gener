@@ -12,6 +12,9 @@ impl Cmd {
         else if program == "problem" {
             self.problem()
         }
+        else if program == "subtask" {
+            self.subtask()
+        }
         else {
             println!("running");
             let output= self.inner.output()

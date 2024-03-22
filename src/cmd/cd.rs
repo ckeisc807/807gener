@@ -13,7 +13,7 @@ impl Cmd{
             if cfg!(any(target_os = "linux", target_os = "macos")) {
                 #[allow(deprecated)]
                 let home_dir = env::home_dir().expect("Couldn't reach home dir");
-                env::set_current_dir(home_dir)
+                env::set_current_dir(&home_dir)
                     .expect("Couldn't change into home directory");
             }
             return ;

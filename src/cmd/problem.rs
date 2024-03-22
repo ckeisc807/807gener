@@ -3,7 +3,7 @@ use crate::Hub;
 use super::Problem;
 use super::Cmd;
 use std::path::{PathBuf, Path};
-use std::{io, fs};
+use std::{io, fs, env};
 
 fn copy_directory(source: &Path, destination: &Path) -> io::Result<()> {
     // 创建目标文件夹
@@ -34,7 +34,7 @@ fn copy_directory(source: &Path, destination: &Path) -> io::Result<()> {
 impl Cmd {
     pub fn problem(&mut self) {
         let args = self.get_args_string();
-        let action = args.first().expect("no args for hub");
+        let action = args.first().expect("no args for problem");
         if action == "create" {
             self.create_problem();
         }
@@ -73,9 +73,11 @@ impl Cmd {
         default_path.push("config");
         default_path.push("default");
         problem_path.push(problem_id.to_string());
-
-        copy_directory(&default_path, &problem_path)
-            .expect("Failed to copy from default");
+        
+        if fs::metadata(&default_path).is_ok() {
+            copy_directory(&default_path, &problem_path)
+                .expect("Failed to copy from default");
+        }
 
         let problem = Problem {
             is_empty: false,
@@ -93,6 +95,21 @@ impl Cmd {
     }
 
     pub fn select_problem(&mut self) {
-        
+        let args = self.get_args_string();
+        let selected_path_str = match args.get(1) {
+            Some(arg1) => arg1.clone(),
+            None => {
+                env::current_dir().expect("Could get current dir")
+                    .to_string_lossy().to_string()
+            }
+        };
+
+        let selected_path = Path::new(&selected_path_str);
+        let problem = Problem::from_json(&selected_path)
+            .expect("Couldn't get problem for json");
+        env::set_current_dir(&problem.path)
+            .expect("Couldn't go to problem hub");
+
+        self.problem = Some(problem);
     }
 }

@@ -3,6 +3,7 @@ pub mod run;
 pub mod hub;
 pub mod problem;
 pub mod func;
+pub mod subtask;
 
 use crate::Hub;
 use crate::hub::problem::Problem;

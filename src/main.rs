@@ -40,15 +40,17 @@ fn main() {
     let mut cmd = Cmd::new();
 
     loop{
-        if cmd.hub.is_none() {
+        if let Some(problem) = &cmd.problem {
+            print!("selected problem: {}/{}>", cmd.hub.as_ref().expect("no hub selected").oj_name,problem.problem_name);
+        }
+        else if let Some(hub) = &cmd.hub {
+            print!("selected hub: {}>", hub.oj_name);
+        }
+        else if cmd.hub.is_none() {
             let path = get_home_to_current_path().expect("err");
-            print!("807gener:{}>",path);
+            print!("807gener: {}>",path);
         }
-        else {
-            if let Some(hub) = &cmd.hub {
-                print!("selected hub:{}>", hub.oj_name);
-            }
-        }
+        
         io::stdout().flush()
             .expect("flush error");
         
