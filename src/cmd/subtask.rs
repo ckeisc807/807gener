@@ -26,6 +26,14 @@ impl Cmd {
         if subtask_name.chars().last() == Some('\n') {
             subtask_name.pop();
         }
+        
+        let mut constraint = String::new();
+        println!("Please input subtask constraint");
+        io::stdin().read_line(&mut constraint)
+            .expect("Error to read constraint");
+        if constraint.chars().last() == Some('\n') {
+            constraint.pop();
+        }
 
         println!("Please input subtask score");
         let mut tmp_input = String::new();
@@ -42,8 +50,10 @@ impl Cmd {
         let subtask= SubTask {
             gen_file: format!("{}.cpp",subtask_name),
             check_file: format!("{}.cpp", subtask_name),
+            constraint: constraint.clone(),
             score: score,
         };
+
         let problem = self.problem.as_mut().expect("no problem selected");
         problem.subtasks.push(subtask);
 

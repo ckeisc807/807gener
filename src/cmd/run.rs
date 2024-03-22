@@ -3,7 +3,8 @@ use super::Cmd;
 impl Cmd {
     pub fn run(&mut self) {
         let program = self.get_program();
-        if program == "cd" {
+        if program == "" {}
+        else if program == "cd" {
             self.cd()
         }
         else if program == "hub" {

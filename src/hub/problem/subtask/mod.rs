@@ -5,6 +5,7 @@ use serde::{Serialize, Deserialize};
 pub struct SubTask {
     pub gen_file: String,
     pub check_file: String,
+    pub constraint: String,
     pub score: i8,
 }
 
